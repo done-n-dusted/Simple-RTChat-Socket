@@ -26,7 +26,7 @@ int main(int argc, char const *argv[]) {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(PORT);
 
-    inet_res = inet_pton(AF_INET, "20.197.56.255", &server_addr.sin_addr);
+    inet_res = inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
 
     if(inet_res <= 0){
         printf("Invalid address. Terminated\n");
@@ -46,23 +46,26 @@ int main(int argc, char const *argv[]) {
     char buff1[1024];// = {0};
     char buff2[1024];// = {0};
 
-    if(!fork()){//child
-        for(;;){
-            memset(buff1, 0, sizeof(buff1));
-            scanf("%[^\n]%*c", buff1);
-            send(socket_fd, buff1, strlen(buff1), 0);
+    for(;;){
+        memset(buff1, 0, sizeof(buff1));
+        scanf("%[^\n]%*c", buff1);
+        send(socket_fd, buff1, strlen(buff1), 0);
+
+        memset(buff2, 0, sizeof(buff2));
+        while(read(socket_fd, buff2, 1024) == 0){
+
         }
+        printf("Server says: %s\n", buff2);
+
     }
 
-    else{//parent
-        for(;;){
-            memset(buff2, 0, sizeof(buff2));
-            int read_res = read(socket_fd, buff2, 1024);
-            if(read_res != 0){
-                printf("Server says: %s\n", buff2);
-            }
-        }
-    }
-    /* code */
+
+
+
+
+
+
+
+
     return 0;
 }
